@@ -17,4 +17,9 @@ public class VacancyController {
         model.addAttribute("vacancies", vacancyRepository.findAll());
         return "vacancies/list";
     }
+
+    @GetMapping("/creat")
+    public String getCreationPage() {
+        return "vacancies/create";
+    }
 }
