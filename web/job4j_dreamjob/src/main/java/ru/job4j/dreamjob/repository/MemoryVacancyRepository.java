@@ -14,12 +14,12 @@ public class MemoryVacancyRepository implements VacancyRepository {
     private final Map<Integer, Vacancy> vacancies = new HashMap<>();
 
     public MemoryVacancyRepository() {
-        save(new Vacancy(0, "Intern Java Developer", "description1", new Date()));
-        save(new Vacancy(0, "Junior Java Developer", "description2", new Date()));
-        save(new Vacancy(0, "Junior+ Java Developer", "description3", new Date()));
-        save(new Vacancy(0, "Middle Java Developer", "description4", new Date()));
-        save(new Vacancy(0, "Middle+ Java Developer", "description5", new Date()));
-        save(new Vacancy(0, "Senior Java Developer", "description6", new Date()));
+        save(new Vacancy(0, "Intern Java Developer", "description1"));
+        save(new Vacancy(0, "Junior Java Developer", "description2"));
+        save(new Vacancy(0, "Junior+ Java Developer", "description3"));
+        save(new Vacancy(0, "Middle Java Developer", "description4"));
+        save(new Vacancy(0, "Middle+ Java Developer", "description5"));
+        save(new Vacancy(0, "Senior Java Developer", "description6"));
     }
 
     public static MemoryVacancyRepository getInstance() {
@@ -41,7 +41,7 @@ public class MemoryVacancyRepository implements VacancyRepository {
     @Override
     public boolean update(Vacancy vacancy) {
 
-        return vacancies.computeIfPresent(vacancy.getId(), (id, oldVacancy) -> new Vacancy(oldVacancy.getId(), vacancy.getTitle(), vacancy.getDescription(), vacancy.getCreationDate())) != null;
+        return vacancies.computeIfPresent(vacancy.getId(), (id, oldVacancy) -> new Vacancy(oldVacancy.getId(), vacancy.getTitle(), vacancy.getDescription())) != null;
     }
 
     @Override
