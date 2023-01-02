@@ -13,10 +13,10 @@ public class MemoryCandidateRepository implements CandidateRepository {
     private final Map<Integer, Candidate> candidates = new HashMap<>();
 
     public MemoryCandidateRepository() {
-        save(new Candidate(0, "Tom", "descriptionTom", true));
-        save(new Candidate(0, "Patric", "descriptionPatric", true));
-        save(new Candidate(0, "Sara", "descriptionSara", true));
-        save(new Candidate(0, "Mikle", "descriptionMikle", true));
+        save(new Candidate(0, "Tom", "descriptionTom", true, 1));
+        save(new Candidate(0, "Patric", "descriptionPatric", true, 2));
+        save(new Candidate(0, "Sara", "descriptionSara", true, 3));
+        save(new Candidate(0, "Mikle", "descriptionMikle", true, 1));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class MemoryCandidateRepository implements CandidateRepository {
 
     @Override
     public boolean update(Candidate candidate) {
-        return candidates.computeIfPresent(candidate.getId(), (id, oldVacancy) -> new Candidate(oldVacancy.getId(), candidate.getTitle(), candidate.getDescription(), candidate.isVisible())) != null;
+        return candidates.computeIfPresent(candidate.getId(), (id, oldVacancy) -> new Candidate(oldVacancy.getId(), candidate.getTitle(), candidate.getDescription(), candidate.isVisible(), candidate.getCityId())) != null;
     }
 
     @Override
