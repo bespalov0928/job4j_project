@@ -3,7 +3,9 @@ package ru.job4j.dreamjob.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.Candidate;
+
 import java.util.*;
+import java.util.function.BiFunction;
 
 @Repository
 public class MemoryCandidateRepository implements CandidateRepository {
@@ -33,7 +35,23 @@ public class MemoryCandidateRepository implements CandidateRepository {
 
     @Override
     public boolean update(Candidate candidate) {
-        return candidates.computeIfPresent(candidate.getId(), (id, oldVacancy) -> new Candidate(oldVacancy.getId(), candidate.getTitle(), candidate.getDescription(), candidate.isVisible(), candidate.getCityId())) != null;
+        boolean rsl = false;
+        Candidate cand = candidates.computeIfPresent(candidate.getId(), new BiFunction<Integer, Candidate, Candidate>() {
+            @Override
+            public Candidate apply(Integer id, Candidate oldVacancy) {
+                Candidate newCandidate = new Candidate(oldVacancy.getId(), candidate.getTitle(), candidate.getDescription(), candidate.isVisible(), candidate.getCityId());
+                if (!Arrays.equals(newCandidate.getPhoto(), candidate.getPhoto())) {
+                    newCandidate.setPhoto(candidate.getPhoto());
+                }
+                newCandidate.setNameFile(candidate.getNameFile());
+                return newCandidate;
+            }
+        });
+        if (cand != null) {
+            rsl = true;
+        }
+        return rsl;
+//        return candidates.computeIfPresent(candidate.getId(), (id, oldVacancy) -> new Candidate(oldVacancy.getId(), candidate.getTitle(), candidate.getDescription(), candidate.isVisible(), candidate.getCityId())) != null;
     }
 
     @Override

@@ -11,6 +11,8 @@ public class Candidate {
     private LocalDateTime creationDate = LocalDateTime.now();
     private boolean visible;
     private int cityId;
+    private String nameFile;
+    private byte[] photo;
 
     public Candidate() {
     }
@@ -66,6 +68,22 @@ public class Candidate {
 
     public void setCityId(int cityId) {
         this.cityId = cityId;
+    }
+
+    public String getNameFile() {
+        return nameFile;
+    }
+
+    public void setNameFile(String nameFile) {
+        this.nameFile = nameFile;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
     @Override

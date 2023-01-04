@@ -45,11 +45,14 @@
                 <tr th:each="candidate: ${candidates}">
                     <td>
                         <span th:if="${candidate.visible}"><i class="bi bi-check-square"></i></span>
-                        <span th:if="${!candidate.visible}"><i class="bi bi-square"></i></span>
+                        <span th:if="${!candidate.visible}"><i class="bi bi-check-square"></i></span>
                     </td>
                     <td th:text="${candidate.id}"/>
-                    <td><a th:text = "${candidate.title}" th:href="@{/candidates/{candidateId}(candidateId=${candidate.id})}"></a></td>
+                    <td><a th:text = "${candidate.title}" th:href="@{/candidates/{candidateId}(candidateId=${candidate.id})}"/></td>
                     <td th:text="${candidate.creationDate}"/>
+                    <td>
+                        <span th:text="${candidate.nameFile}"/>
+                    </td>
                 </tr>
                 </tbody>
             </table>

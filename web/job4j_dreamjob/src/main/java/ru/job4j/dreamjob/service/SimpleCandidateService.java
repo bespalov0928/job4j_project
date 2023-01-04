@@ -41,4 +41,11 @@ public class SimpleCandidateService implements CandidateService {
     public Collection<Candidate> findAll() {
         return candidateRepository.findAll();
     }
+
+//    public byte[] getById(int id) {
+//        Optional<Candidate> candidate = candidateRepository.findById(id);
+//        byte[] rsl = candidate.get().getPhoto();
+//        return rsl;
+//    }
+
 }
