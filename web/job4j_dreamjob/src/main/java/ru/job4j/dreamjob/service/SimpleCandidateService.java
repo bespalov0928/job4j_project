@@ -3,6 +3,7 @@ package ru.job4j.dreamjob.service;
 import org.springframework.stereotype.Service;
 import ru.job4j.dreamjob.model.Candidate;
 import ru.job4j.dreamjob.repository.CandidateRepository;
+import ru.job4j.dreamjob.repository.DbCandidateRepository;
 import ru.job4j.dreamjob.repository.MemoryCandidateRepository;
 
 import java.util.Collection;
@@ -11,9 +12,9 @@ import java.util.Optional;
 @Service
 public class SimpleCandidateService implements CandidateService {
 
-    private final CandidateRepository candidateRepository;
+    private final DbCandidateRepository candidateRepository;
 
-    public SimpleCandidateService(CandidateRepository candidateRepository) {
+    public SimpleCandidateService(DbCandidateRepository candidateRepository) {
         this.candidateRepository = candidateRepository;
     }
 

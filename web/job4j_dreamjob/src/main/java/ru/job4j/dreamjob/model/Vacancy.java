@@ -1,8 +1,6 @@
 package ru.job4j.dreamjob.model;
 
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 public class Vacancy {

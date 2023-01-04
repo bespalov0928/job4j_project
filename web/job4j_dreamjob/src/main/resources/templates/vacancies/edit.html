@@ -21,7 +21,7 @@
           <a class="nav-item nav-link" href="/">Главная</a>
           <a class="nav-item nav-link" th:href="@{/vacancies}">Вакансии</a>
           <a class="nav-item nav-link" th:href="@{/candidates}">Кандидаты</a>
-          <a class="nav-item nav-link" th:href="@{/vacancies/create}">Создать вакансию</a>
+<!--          <a class="nav-item nav-link" th:href="@{/vacancies/create}">Создать вакансию</a>-->
         </div>
       </div>
     </div>
@@ -35,7 +35,7 @@
       </div>
       <div class="mb-3">
         <label for="description" class="form-label"><b>Описание</b></label>
-        <textarea class="form-control" id="description" name="description" th:field="*{description}" rows="25" placeholder="Опишите требования к кандидату"></textarea>
+        <textarea class="form-control" id="description" name="description" th:field="*{description}" rows="15" placeholder="Опишите требования к кандидату"></textarea>
       </div>
       <div class="form-check mb-3">
         <input type="checkbox" name="visible" class="form-check-input" id="visible" th:field="*{visible}">
