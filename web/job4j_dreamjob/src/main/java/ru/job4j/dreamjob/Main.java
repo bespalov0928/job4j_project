@@ -11,6 +11,20 @@ import java.util.Properties;
 @SpringBootApplication
 public class Main {
 
+    @Bean
+    public BasicDataSource loadPool() {
+        Properties cfg = loadDbProperties();
+        BasicDataSource pool = new BasicDataSource();
+        pool.setDriverClassName(cfg.getProperty("driver-class-name"));
+        pool.setUrl(cfg.getProperty("url"));
+        pool.setUsername(cfg.getProperty("username"));
+        pool.setPassword(cfg.getProperty("password"));
+        pool.setMinIdle(5);
+        pool.setMaxIdle(10);
+        pool.setMaxOpenPreparedStatements(100);
+        return pool;
+    }
+
     private Properties loadDbProperties() {
         Properties cfg = new Properties();
         try (BufferedReader io = new BufferedReader(new InputStreamReader(Main.class.getClassLoader().getResourceAsStream("liquibase.properties")))) {
@@ -24,20 +38,6 @@ public class Main {
             throw new IllegalStateException(e);
         }
         return cfg;
-    }
-
-    @Bean
-    public BasicDataSource loadPool() {
-        Properties cfg = loadDbProperties();
-        BasicDataSource pool = new BasicDataSource();
-        pool.setDriverClassName(cfg.getProperty("driver-class-name"));
-        pool.setUrl(cfg.getProperty("url"));
-        pool.setUsername(cfg.getProperty("username"));
-        pool.setPassword(cfg.getProperty("password"));
-        pool.setMinIdle(5);
-        pool.setMaxIdle(10);
-        pool.setMaxOpenPreparedStatements(100);
-        return pool;
     }
 
     public static void main(String[] args) {

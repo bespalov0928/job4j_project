@@ -1,9 +1,11 @@
 package ru.job4j.dreamjob.repository;
 
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import ru.job4j.dreamjob.Main;
-import ru.job4j.dreamjob.model.Vacancy;
+import ru.job4j.dreamjob.model.Candidate;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,7 +17,7 @@ import java.util.Properties;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-class DbVacancyRepositoryTest {
+class DbCandidateRepositoryTest {
 
     private static BasicDataSource pool;
 
@@ -50,7 +52,7 @@ class DbVacancyRepositoryTest {
     @AfterEach
     public void wipeTable() {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps = cn.prepareStatement("delete from vacancy")) {
+             PreparedStatement ps = cn.prepareStatement("delete from candidate")) {
             ps.execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,50 +61,50 @@ class DbVacancyRepositoryTest {
 
     @Test
     void save() {
-        VacancyRepository store = new DbVacancyRepository(pool);
-        Vacancy vacancy = new Vacancy(0, "Intern Java Developer", "description1", true, 1);
-        store.save(vacancy);
-        Vacancy vacancyInDb = store.findById(vacancy.getId()).get();
-        assertThat(vacancyInDb.getTitle(), is(vacancy.getTitle()));
+        CandidateRepository store = new DbCandidateRepository(pool);
+        Candidate candidate = new Candidate(0, "Tom", "descriptionTom", true, 1);
+        store.save(candidate);
+        Candidate candidateInDb = store.findById(candidate.getId()).get();
+        assertThat(candidateInDb.getTitle(), is(candidate.getTitle()));
     }
 
     @Test
     void deleteById() {
-        VacancyRepository store = new DbVacancyRepository(pool);
-        Vacancy vacancy = new Vacancy(0, "Intern Java Developer", "description1", true, 1);
-        store.save(vacancy);
-        store.deleteById(vacancy.getId());
+        CandidateRepository store = new DbCandidateRepository(pool);
+        Candidate candidate = new Candidate(0, "Tom", "descriptionTom", true, 1);
+        store.save(candidate);
+        store.deleteById(candidate.getId());
         assertThat(store.findAll().size(), is(0));
     }
 
     @Test
     void update() {
-        VacancyRepository store = new DbVacancyRepository(pool);
-        Vacancy vacancy = new Vacancy(0, "Intern Java Developer", "description1", true, 1);
-        store.save(vacancy);
-        Vacancy vacancyInDb = store.findById(vacancy.getId()).get();
-        vacancyInDb.setTitle("Intern Java Developer middle");
-        store.update(vacancyInDb);
-        Vacancy vacancyInDbUpdate =  store.findById(vacancy.getId()).get();
-        assertThat(vacancyInDbUpdate.getTitle(), is("Intern Java Developer middle"));
+        CandidateRepository store = new DbCandidateRepository(pool);
+        Candidate candidate = new Candidate(0, "Tom", "descriptionTom", true, 1);
+        store.save(candidate);
+        Candidate candidateInDb = store.findById(candidate.getId()).get();
+        candidateInDb.setTitle("Intern Java Developer middle");
+        store.update(candidateInDb);
+        Candidate candidateInDbUpdate =  store.findById(candidate.getId()).get();
+        assertThat(candidateInDbUpdate.getTitle(), is("Intern Java Developer middle"));
     }
 
     @Test
     void findById() {
-        VacancyRepository store = new DbVacancyRepository(pool);
-        Vacancy vacancy = new Vacancy(0, "Intern Java Developer", "description1", true, 1);
-        store.save(vacancy);
-        Vacancy vacancyInDb = store.findById(vacancy.getId()).get();
-        assertThat(vacancyInDb.getTitle(), is("Intern Java Developer"));
+        CandidateRepository store = new DbCandidateRepository(pool);
+        Candidate candidate = new Candidate(0, "Tom", "descriptionTom", true, 1);
+        store.save(candidate);
+        Candidate candidateInDb = store.findById(candidate.getId()).get();
+        assertThat(candidateInDb.getTitle(), is("Tom"));
 
     }
 
     @Test
     void findAll() {
-        VacancyRepository store = new DbVacancyRepository(pool);
-        Vacancy vacancy = new Vacancy(0, "Intern Java Developer", "description1", true, 1);
-        store.save(vacancy);
-        Collection<Vacancy> list = store.findAll();
+        CandidateRepository store = new DbCandidateRepository(pool);
+        Candidate candidate = new Candidate(0, "Tom", "descriptionTom", true, 1);
+        store.save(candidate);
+        Collection<Candidate> list = store.findAll();
         assertThat(list.size(), is(1));
     }
 }
