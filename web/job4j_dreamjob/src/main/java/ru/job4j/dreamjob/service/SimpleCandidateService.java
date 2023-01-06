@@ -2,9 +2,7 @@ package ru.job4j.dreamjob.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.dreamjob.model.Candidate;
-import ru.job4j.dreamjob.repository.CandidateRepository;
 import ru.job4j.dreamjob.repository.DbCandidateRepository;
-import ru.job4j.dreamjob.repository.MemoryCandidateRepository;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -42,11 +40,5 @@ public class SimpleCandidateService implements CandidateService {
     public Collection<Candidate> findAll() {
         return candidateRepository.findAll();
     }
-
-//    public byte[] getById(int id) {
-//        Optional<Candidate> candidate = candidateRepository.findById(id);
-//        byte[] rsl = candidate.get().getPhoto();
-//        return rsl;
-//    }
 
 }

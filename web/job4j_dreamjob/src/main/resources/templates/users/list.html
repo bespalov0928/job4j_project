@@ -25,8 +25,8 @@
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
                     <a class="nav-item nav-link" href="/">Главная</a>
-                    <a class="nav-item nav-link active" th:href="@{/candidates}">Кандидаты</a>
-                    <a class="nav-item nav-link active" th:href="@{/candidates/creat}">Создать кандидата</a>
+                    <a class="nav-item nav-link active" th:href="@{/users}">Пользователи</a>
+                    <a class="nav-item nav-link active" th:href="@{/users/registration}">Зарегистрировать нового пользователя</a>
                 </div>
             </div>
         </div>
@@ -38,20 +38,14 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Имя</th>
+                    <th scope="col">пароль</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="candidate: ${candidates}">
-                    <td>
-                        <span th:if="${candidate.visible}"><i class="bi bi-check-square"></i></span>
-                        <span th:if="${!candidate.visible}"><i class="bi bi-check-square"></i></span>
-                    </td>
-                    <td th:text="${candidate.id}"/>
-                    <td><a th:text = "${candidate.title}" th:href="@{/candidates/{candidateId}(candidateId=${candidate.id})}"/></td>
-                    <td th:text="${candidate.creationDate}"/>
-                    <td>
-                        <span th:text="${candidate.nameFile}"/>
-                    </td>
+                <tr th:each="user: ${users}">
+                     <td th:text="${user.id}"/>
+                    <td><a th:text = "${user.email}" th:href="@{/users/{id}(id=${user.id})}"/></td>
+                    <td th:text="${user.password}"</td>
                 </tr>
                 </tbody>
             </table>

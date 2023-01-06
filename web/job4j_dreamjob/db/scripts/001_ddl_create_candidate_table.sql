@@ -1,4 +1,5 @@
-CREATE TABLE candidate
+
+CREATE TABLE if not exists candidate
 (
     id           SERIAL PRIMARY KEY,
     title        TEXT,
