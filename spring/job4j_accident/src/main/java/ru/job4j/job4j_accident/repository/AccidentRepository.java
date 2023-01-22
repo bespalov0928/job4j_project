@@ -1,11 +1,11 @@
-package ru.job4j.job4j_accident.service;
+package ru.job4j.job4j_accident.repository;
 
 import ru.job4j.job4j_accident.model.Accident;
 
 import java.util.Collection;
 import java.util.Optional;
 
-public interface AccidentService {
+public interface AccidentRepository {
 
     public Accident save(Accident accident);
 

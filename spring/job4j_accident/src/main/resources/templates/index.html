@@ -19,10 +19,12 @@
 <body>
 <div class="container">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup"/>
         <div class="container">
             <div th:text="${user}"></div>
+            <a class="nav-item nav-link active" th:href="@{/accidents/createAcc}">Добавить Инцидент</a>
         </div>
-    </nav>
+     </nav>
     <table class="table table-sm">
         <thead class="thead-inverse">
         <tr>
@@ -35,7 +37,7 @@
         <tbody>
         <tr th:each="acc, iterStat : ${accidents}">
             <td th:text="${iterStat.index}+1"></td>
-            <td th:text="${acc.name}"></td>
+            <td><a th:text="${acc.name}" th:href="@{/accidents/{accidentId}(accidentId=${acc.id})}"/></td>
             <td th:text="${acc.text}"></td>
             <td th:text="${acc.address}"></td>
         </tr>

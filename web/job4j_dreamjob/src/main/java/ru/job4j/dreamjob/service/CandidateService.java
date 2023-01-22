@@ -17,5 +17,4 @@ public interface CandidateService {
 
     Collection<Candidate> findAll();
 
-
 }
