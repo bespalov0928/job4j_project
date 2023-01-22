@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Job4jAccidentApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Job4jAccidentApplication.class, args);
+        SpringApplication.run(ru.job4j.job4j_accident.Job4jAccidentApplication.class, args);
+        System.out.println("Go to http://localhost:8080/index");
     }
 
 }
