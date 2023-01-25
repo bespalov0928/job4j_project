@@ -2,6 +2,7 @@ package ru.job4j.job4j_accident.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.job4j.job4j_accident.model.Accident;
+import ru.job4j.job4j_accident.model.AccidentType;
 
 import java.util.*;
 
@@ -10,11 +11,13 @@ import java.util.*;
 public class MemAccidentRepository implements AccidentRepository {
     private int nextId = 1;
     private final Map<Integer, Accident> accidents = new HashMap<>();
+    private final MemAccidentTypeRepository repositoryTypes;
 
-    public MemAccidentRepository() {
-        save(new Accident(0, "name1", "text1", "address1"));
-        save(new Accident(0, "name2", "text2", "address2"));
-        save(new Accident(0, "name3", "text3", "address3"));
+    public MemAccidentRepository(MemAccidentTypeRepository repositoryTypes) {
+        this.repositoryTypes = repositoryTypes;
+        save(new Accident(0, "name1", "text1", "address1", repositoryTypes.findById(0).get()));
+        save(new Accident(0, "name2", "text2", "address2", repositoryTypes.findById(1).get()));
+        save(new Accident(0, "name3", "text3", "address3", repositoryTypes.findById(2).get()));
     }
 
     @Override
@@ -31,7 +34,7 @@ public class MemAccidentRepository implements AccidentRepository {
 
     @Override
     public boolean update(Accident accident) {
-        return accidents.computeIfPresent(accident.getId(), (id, oldVacancy) -> new Accident(oldVacancy.getId(), accident.getName(), accident.getText(), accident.getAddress())) != null;
+        return accidents.computeIfPresent(accident.getId(), (id, oldVacancy) -> new Accident(oldVacancy.getId(), accident.getName(), accident.getText(), accident.getAddress(), accident.getType())) != null;
     }
 
     @Override

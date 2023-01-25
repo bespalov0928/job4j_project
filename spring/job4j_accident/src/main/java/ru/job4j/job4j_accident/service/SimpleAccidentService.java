@@ -2,7 +2,9 @@ package ru.job4j.job4j_accident.service;
 
 import org.springframework.stereotype.Service;
 import ru.job4j.job4j_accident.model.Accident;
+import ru.job4j.job4j_accident.model.AccidentType;
 import ru.job4j.job4j_accident.repository.MemAccidentRepository;
+import ru.job4j.job4j_accident.repository.MemAccidentTypeRepository;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -10,14 +12,18 @@ import java.util.Optional;
 @Service
 public class SimpleAccidentService implements AccidentService {
 
-    private final MemAccidentRepository accidentMem;
-    public SimpleAccidentService(MemAccidentRepository accidentMem) {
-        this.accidentMem = accidentMem;
+    private final MemAccidentRepository accidentRepository;
+    private final MemAccidentTypeRepository typeRepository;
+    public SimpleAccidentService(MemAccidentRepository accidentRepository, MemAccidentTypeRepository typeRepository) {
+        this.accidentRepository = accidentRepository;
+        this.typeRepository = typeRepository;
     }
 
     @Override
     public Accident save(Accident accident) {
-        accidentMem.save(accident);
+        Optional<AccidentType> accidentType = typeRepository.findById(accident.getType().getId());
+        accident.setType(accidentType.get());
+        accidentRepository.save(accident);
         return accident;
     }
 
@@ -28,17 +34,19 @@ public class SimpleAccidentService implements AccidentService {
 
     @Override
     public boolean update(Accident accident) {
-        boolean rsl = accidentMem.update(accident);
+        Optional<AccidentType> accidentType = typeRepository.findById(accident.getType().getId());
+        accident.setType(accidentType.get());
+        boolean rsl = accidentRepository.update(accident);
         return rsl;
     }
 
     @Override
     public Optional<Accident> findById(int id) {
-        return accidentMem.findById(id);
+        return accidentRepository.findById(id);
     }
 
     @Override
     public Collection<Accident> findAll() {
-        return accidentMem.findAll();
+        return accidentRepository.findAll();
     }
 }

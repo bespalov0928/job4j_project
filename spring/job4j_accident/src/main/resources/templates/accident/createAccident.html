@@ -23,7 +23,6 @@
             <div class="navbar-nav">
                 <a class="nav-item nav-link" href="#">Главная</a>
                 <a class="nav-item nav-link" th:href="@{/index}">Инциденты</a>
-                <a class="nav-item nav-link active" th:href="@{/accidents/createAcc}">Добавить Инцидент</a>
             </div>
         </div>
     </nav>
@@ -37,15 +36,25 @@
                     <input type="hidden" name="id" value="0"/>
                     <div class="form-group">
                         <label for="name">Имя</label>
-                        <input type="text" class="form-control" name="name" id="name" placeholder="Наименование инцидента">
+                        <input type="text" class="form-control" name="name" id="name"
+                               placeholder="Наименование инцидента">
                     </div>
                     <div class="form-group">
                         <label for="text">Содержание</label>
                         <input type="text" class="form-control" name="text" id="text" placeholder="Описание инцидента">
                     </div>
                     <div class="form-group">
-                        <label for="address">Адресс</label>
-                        <input type="text" class="form-control" name="address" id="address" placeholder="Адрес инцидента">
+                        <label for="address">Адрес</label>
+                        <input type="text" class="form-control" name="address" id="address"
+                               placeholder="Адрес инцидента">
+                    </div>
+                    <div class="form-group">
+                        <label for="type.id">Тип</label>
+                        <select class="form-control" id="type.id"  name="type.id">
+                            <option th:each="type: ${types}"
+                                    th:text="${type.name}"
+                                    th:value="${type.id}"/>
+                        </select>
                     </div>
                     <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
                 </form>
