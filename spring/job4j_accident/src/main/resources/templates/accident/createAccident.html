@@ -50,10 +50,18 @@
                     </div>
                     <div class="form-group">
                         <label for="type.id">Тип</label>
-                        <select class="form-control" id="type.id"  name="type.id">
+                        <select class="form-control" id="type.id" name="type.id">
                             <option th:each="type: ${types}"
                                     th:text="${type.name}"
                                     th:value="${type.id}"/>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type.id" name="rids">Статья</label>
+                        <select class="form-control" id="rids" name="rids" multiple>
+                            <option th:each="rule: ${rules}"
+                                    th:text="${rule.name}"
+                                    th:value="${rule.id}"/>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-primary mt-3">Сохранить</button>

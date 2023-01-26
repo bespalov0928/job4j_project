@@ -6,9 +6,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.job4j_accident.model.Accident;
 import ru.job4j.job4j_accident.model.AccidentType;
+import ru.job4j.job4j_accident.model.Rule;
 import ru.job4j.job4j_accident.service.SimpleAccidentService;
 import ru.job4j.job4j_accident.service.SimpleAccidentTypeService;
+import ru.job4j.job4j_accident.service.SimpleRuleService;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,35 +22,40 @@ import java.util.Optional;
 public class AccidentControl {
     private final SimpleAccidentService accidentService;
     private final SimpleAccidentTypeService accidentTypeService;
+    private final SimpleRuleService ruleService;
 
     @GetMapping("/formCreateAccident")
     public String viewCreateAccident(Model model) {
-        List<AccidentType> types = (List<AccidentType>) accidentTypeService.findAll();
-        model.addAttribute("types", types);
+        model.addAttribute("types", accidentTypeService.findAll());
+        model.addAttribute("rules", ruleService.findAll());
         return "accident/createAccident";
     }
 
     @PostMapping("/createAcc")
-    public String save(@ModelAttribute Accident accident) {
-//        Optional<AccidentType> accidentType = accidentTypeService.findById(accident.getType().getId());
-//        accident.setType(accidentType.get());
-        accidentService.save(accident);
+    public String save(@ModelAttribute Accident accident, HttpServletRequest req) {
+        String[] ids = req.getParameterValues("rids");
+        accidentService.save(accident, ids);
         return "redirect:/index";
     }
 
     @GetMapping("/formUpdateAccident")
     public String getById(@RequestParam("id") int id, Model model) {
-        List<AccidentType> types = (List<AccidentType>) accidentTypeService.findAll();
-        Optional<Accident> rsl = accidentService.findById(id);
-        model.addAttribute("accident", rsl.get());
-        model.addAttribute("types", types);
-        model.addAttribute("typeId", rsl.get().getType().getId());
+        List<AccidentType> typeList = (List<AccidentType>) accidentTypeService.findAll();
+        List<Rule> ruleList = (List<Rule>) ruleService.findAll();
+        Optional<Accident> accident = accidentService.findById(id);
+        List<Rule> rulesId = accident.get().getRules();
+        model.addAttribute("accident", accident.get());
+        model.addAttribute("types", typeList);
+        model.addAttribute("typeId", accident.get().getType().getId());
+        model.addAttribute("rules", ruleList);
+        model.addAttribute("rulesId", rulesId == null ? new ArrayList<>() : rulesId);
         return "accident/editAccident";
     }
 
     @PostMapping("/update")
-    public String update(@ModelAttribute Accident accident, Model model) {
-        boolean rsl = accidentService.update(accident);
+    public String update(@ModelAttribute Accident accident, Model model, HttpServletRequest req) {
+        String[] ids = req.getParameterValues("rids");
+        boolean rsl = accidentService.update(accident, ids);
         if (!rsl) {
             model.addAttribute("message", "Инцидент не найден");
             return "errors/404";

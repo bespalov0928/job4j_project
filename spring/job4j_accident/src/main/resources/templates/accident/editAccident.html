@@ -49,13 +49,24 @@
                         <input type="text" class="form-control" name="address" id="address" th:field="*{address}"
                                placeholder="Адрес инцидента">
                     </div>
-                    <div class="form-group" >
+                    <div class="form-group">
                         <label for="type.id">Тип</label>
                         <select class="form-control" name="type.id" id="type.id">
                             <option th:each="type: ${types}"
                                     th:text="${type.name}"
                                     th:value="${type.id}"
                                     th:selected="${type.id==typeId}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="type.id" name="rids">Статья</label>
+                        <select class="form-control" id="rids" name="rids" multiple>
+                            <!--                        <select class="form-control" id="rids" name="rids"  th:field="*{rules}" multiple>-->
+                            <option th:each="rule: ${rules}"
+                                    th:text="${rule.name}"
+                                    th:value="${rule.id}"
+                                    th:selected="${rulesId.contains(rule)}">
                             </option>
                         </select>
                     </div>

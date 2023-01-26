@@ -3,26 +3,39 @@ package ru.job4j.job4j_accident.service;
 import org.springframework.stereotype.Service;
 import ru.job4j.job4j_accident.model.Accident;
 import ru.job4j.job4j_accident.model.AccidentType;
+import ru.job4j.job4j_accident.model.Rule;
 import ru.job4j.job4j_accident.repository.MemAccidentRepository;
 import ru.job4j.job4j_accident.repository.MemAccidentTypeRepository;
+import ru.job4j.job4j_accident.repository.MemRuleRepository;
 
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.Stream;
 
 @Service
 public class SimpleAccidentService implements AccidentService {
 
     private final MemAccidentRepository accidentRepository;
     private final MemAccidentTypeRepository typeRepository;
-    public SimpleAccidentService(MemAccidentRepository accidentRepository, MemAccidentTypeRepository typeRepository) {
+    private final MemRuleRepository ruleRepository;
+
+    public SimpleAccidentService(MemAccidentRepository accidentRepository, MemAccidentTypeRepository typeRepository, MemRuleRepository ruleRepository) {
         this.accidentRepository = accidentRepository;
         this.typeRepository = typeRepository;
+        this.ruleRepository = ruleRepository;
     }
 
     @Override
-    public Accident save(Accident accident) {
+    public Accident save(Accident accident, String[] ids) {
+        Integer[] arrInt = Stream.of(ids).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new);
         Optional<AccidentType> accidentType = typeRepository.findById(accident.getType().getId());
         accident.setType(accidentType.get());
+
+        List<Rule> listRule = getRules(ids);
+        accident.setRules(listRule);
         accidentRepository.save(accident);
         return accident;
     }
@@ -33,9 +46,13 @@ public class SimpleAccidentService implements AccidentService {
     }
 
     @Override
-    public boolean update(Accident accident) {
+    public boolean update(Accident accident, String[] ids) {
         Optional<AccidentType> accidentType = typeRepository.findById(accident.getType().getId());
         accident.setType(accidentType.get());
+
+        List<Rule> listRule = getRules(ids);
+        accident.setRules(listRule);
+
         boolean rsl = accidentRepository.update(accident);
         return rsl;
     }
@@ -49,4 +66,24 @@ public class SimpleAccidentService implements AccidentService {
     public Collection<Accident> findAll() {
         return accidentRepository.findAll();
     }
+
+    private List<Rule> getRules(String[] ids) {
+        Integer[] arrInt = Stream.of(ids).mapToInt(Integer::parseInt).boxed().toArray(Integer[]::new);
+        Supplier<List<Rule>> suppler = LinkedList::new;
+        BiConsumer<List<Rule>, Integer> biConsumer = new BiConsumer<List<Rule>, Integer>() {
+            @Override
+            public void accept(List<Rule> rules, Integer integer) {
+                var ruleRsl = ruleRepository.findById(integer).get();
+                rules.add(ruleRsl);
+            }
+        };
+        BinaryOperator<List<Rule>> operator = (left, right) -> {
+            left.addAll(right);
+            return left;
+        };
+        var listRule = Stream.of(arrInt).collect(Collector.of(suppler, biConsumer, operator));
+        return listRule;
+
+    }
+
 }
