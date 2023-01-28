@@ -1,5 +1,6 @@
 package ru.job4j.job4j_accident.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.job4j_accident.model.Accident;
 import ru.job4j.job4j_accident.model.AccidentType;
@@ -7,6 +8,9 @@ import ru.job4j.job4j_accident.model.Rule;
 import ru.job4j.job4j_accident.repository.MemAccidentRepository;
 import ru.job4j.job4j_accident.repository.MemAccidentTypeRepository;
 import ru.job4j.job4j_accident.repository.MemRuleRepository;
+import ru.job4j.job4j_accident.repository.hbm.HbmAccidentRepository;
+import ru.job4j.job4j_accident.repository.hbm.HbmAccidentTypeRepository;
+import ru.job4j.job4j_accident.repository.hbm.HbmRuleRepository;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -16,17 +20,16 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 @Service
+@AllArgsConstructor
 public class SimpleAccidentService implements AccidentService {
 
-    private final MemAccidentRepository accidentRepository;
-    private final MemAccidentTypeRepository typeRepository;
-    private final MemRuleRepository ruleRepository;
+//    private final MemAccidentRepository accidentRepository;
+//    private final MemAccidentTypeRepository typeRepository;
+//    private final MemRuleRepository ruleRepository;
+    private final HbmAccidentRepository accidentRepository;
+    private final HbmAccidentTypeRepository typeRepository;
+    private final HbmRuleRepository ruleRepository;
 
-    public SimpleAccidentService(MemAccidentRepository accidentRepository, MemAccidentTypeRepository typeRepository, MemRuleRepository ruleRepository) {
-        this.accidentRepository = accidentRepository;
-        this.typeRepository = typeRepository;
-        this.ruleRepository = ruleRepository;
-    }
 
     @Override
     public Accident save(Accident accident, String[] ids) {

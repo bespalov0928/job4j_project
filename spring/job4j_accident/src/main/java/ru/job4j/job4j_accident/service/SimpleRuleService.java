@@ -4,15 +4,17 @@ import org.springframework.stereotype.Service;
 import ru.job4j.job4j_accident.model.AccidentType;
 import ru.job4j.job4j_accident.model.Rule;
 import ru.job4j.job4j_accident.repository.MemRuleRepository;
+import ru.job4j.job4j_accident.repository.hbm.HbmRuleRepository;
 
 import java.util.Collection;
 import java.util.Optional;
 
 @Service
 public class SimpleRuleService {
-    private final MemRuleRepository ruleRepository;
+//    private final MemRuleRepository ruleRepository;
+    private final HbmRuleRepository ruleRepository;
 
-    public SimpleRuleService(MemRuleRepository ruleRepository) {
+    public SimpleRuleService(HbmRuleRepository ruleRepository) {
         this.ruleRepository = ruleRepository;
     }
 

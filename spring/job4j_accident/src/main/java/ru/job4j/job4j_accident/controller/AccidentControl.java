@@ -43,12 +43,15 @@ public class AccidentControl {
         List<AccidentType> typeList = (List<AccidentType>) accidentTypeService.findAll();
         List<Rule> ruleList = (List<Rule>) ruleService.findAll();
         Optional<Accident> accident = accidentService.findById(id);
-        List<Rule> rulesId = accident.get().getRules();
+//        List<Rule> rules = new ArrayList<>();
+        List<Rule> rules = accident.get().getRules();
+        Optional<AccidentType> accidentType = Optional.ofNullable(accident.get().getType());
+
         model.addAttribute("accident", accident.get());
         model.addAttribute("types", typeList);
-        model.addAttribute("typeId", accident.get().getType().getId());
+        model.addAttribute("typeId", accidentType.isEmpty() ? 0 : accidentType.get().getId());
         model.addAttribute("rules", ruleList);
-        model.addAttribute("rulesId", rulesId == null ? new ArrayList<>() : rulesId);
+        model.addAttribute("rulesId", rules == null ? new ArrayList<>() : rules);
         return "accident/editAccident";
     }
 
