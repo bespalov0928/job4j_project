@@ -19,7 +19,6 @@ public class HbmAccidentRepository implements AccidentRepository {
     private final HbmRuleRepository ruleRepository;
     private final SessionFactory sf;
 
-
     @Override
     public Accident save(Accident accident) {
         try (Session session = sf.openSession()) {

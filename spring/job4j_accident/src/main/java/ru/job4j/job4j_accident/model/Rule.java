@@ -1,12 +1,8 @@
 package ru.job4j.job4j_accident.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
-import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -20,4 +16,5 @@ public class Rule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+
 }

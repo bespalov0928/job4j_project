@@ -1,12 +1,8 @@
 package ru.job4j.job4j_accident.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
-import java.util.List;
+
 
 @Data
 @AllArgsConstructor
@@ -21,7 +17,4 @@ public class AccidentType {
     private int id;
     private String name;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @JoinColumn(name = "type_id")
-//    List<Accident> accidents;
 }

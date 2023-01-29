@@ -25,4 +25,5 @@ public class JdbcConfig {
         ds.setPassword(password);
         return ds;
     }
+
 }

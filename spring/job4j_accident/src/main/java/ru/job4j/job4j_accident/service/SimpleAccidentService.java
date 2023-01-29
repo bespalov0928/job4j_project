@@ -1,6 +1,6 @@
 package ru.job4j.job4j_accident.service;
 
-import lombok.AllArgsConstructor;
+//import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.job4j_accident.model.Accident;
 import ru.job4j.job4j_accident.model.AccidentType;
@@ -20,7 +20,7 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 @Service
-@AllArgsConstructor
+//@AllArgsConstructor
 public class SimpleAccidentService implements AccidentService {
 
 //    private final MemAccidentRepository accidentRepository;
@@ -30,6 +30,11 @@ public class SimpleAccidentService implements AccidentService {
     private final HbmAccidentTypeRepository typeRepository;
     private final HbmRuleRepository ruleRepository;
 
+    public SimpleAccidentService(HbmAccidentRepository accidentRepository, HbmAccidentTypeRepository typeRepository, HbmRuleRepository ruleRepository) {
+        this.accidentRepository = accidentRepository;
+        this.typeRepository = typeRepository;
+        this.ruleRepository = ruleRepository;
+    }
 
     @Override
     public Accident save(Accident accident, String[] ids) {

@@ -1,6 +1,8 @@
 package ru.job4j.job4j_accident.controller;
 
+
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,10 +21,17 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/accidents")
 @AllArgsConstructor
+//@NoArgsConstructor
 public class AccidentControl {
     private final SimpleAccidentService accidentService;
     private final SimpleAccidentTypeService accidentTypeService;
     private final SimpleRuleService ruleService;
+
+//    public AccidentControl(SimpleAccidentService accidentService, SimpleAccidentTypeService accidentTypeService, SimpleRuleService ruleService) {
+//        this.accidentService = accidentService;
+//        this.accidentTypeService = accidentTypeService;
+//        this.ruleService = ruleService;
+//    }
 
     @GetMapping("/formCreateAccident")
     public String viewCreateAccident(Model model) {
