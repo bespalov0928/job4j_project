@@ -1,6 +1,6 @@
 package ru.job4j.job4j_accident.service;
 
-//import lombok.AllArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.job4j_accident.model.Accident;
 import ru.job4j.job4j_accident.model.AccidentType;
@@ -11,6 +11,9 @@ import ru.job4j.job4j_accident.repository.MemRuleRepository;
 import ru.job4j.job4j_accident.repository.hbm.HbmAccidentRepository;
 import ru.job4j.job4j_accident.repository.hbm.HbmAccidentTypeRepository;
 import ru.job4j.job4j_accident.repository.hbm.HbmRuleRepository;
+import ru.job4j.job4j_accident.repository.jpa.JpaAccidentRepository;
+import ru.job4j.job4j_accident.repository.jpa.JpaAccidentTypeRepository;
+import ru.job4j.job4j_accident.repository.jpa.JpaRuleRepository;
 
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -20,21 +23,20 @@ import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 @Service
-//@AllArgsConstructor
+@AllArgsConstructor
 public class SimpleAccidentService implements AccidentService {
 
 //    private final MemAccidentRepository accidentRepository;
 //    private final MemAccidentTypeRepository typeRepository;
 //    private final MemRuleRepository ruleRepository;
-    private final HbmAccidentRepository accidentRepository;
-    private final HbmAccidentTypeRepository typeRepository;
-    private final HbmRuleRepository ruleRepository;
 
-    public SimpleAccidentService(HbmAccidentRepository accidentRepository, HbmAccidentTypeRepository typeRepository, HbmRuleRepository ruleRepository) {
-        this.accidentRepository = accidentRepository;
-        this.typeRepository = typeRepository;
-        this.ruleRepository = ruleRepository;
-    }
+//    private final HbmAccidentRepository accidentRepository;
+//    private final HbmAccidentTypeRepository typeRepository;
+//    private final HbmRuleRepository ruleRepository;
+
+    private final JpaAccidentRepository accidentRepository;
+    private final JpaAccidentTypeRepository typeRepository;
+    private final JpaRuleRepository ruleRepository;
 
     @Override
     public Accident save(Accident accident, String[] ids) {
@@ -61,7 +63,9 @@ public class SimpleAccidentService implements AccidentService {
         List<Rule> listRule = getRules(ids);
         accident.setRules(listRule);
 
-        boolean rsl = accidentRepository.update(accident);
+//        boolean rsl = accidentRepository.update(accident);
+        boolean rsl = true;
+        accidentRepository.save(accident);
         return rsl;
     }
 
@@ -72,7 +76,7 @@ public class SimpleAccidentService implements AccidentService {
 
     @Override
     public Collection<Accident> findAll() {
-        return accidentRepository.findAll();
+        return (Collection<Accident>) accidentRepository.findAll();
     }
 
     private List<Rule> getRules(String[] ids) {
