@@ -13,4 +13,6 @@
     <include file="db/006_ddl_insert_types_table.sql" relativeToChangelogFile="true"/>
     <include file="db/007_ddl_insert_accidents_table.sql" relativeToChangelogFile="true"/>
     <include file="db/008_ddl_insert_accident_rule_table.sql" relativeToChangelogFile="true"/>
+    <include file="db/009_ddl_create_users_table.sql" relativeToChangelogFile="true"/>
+    <include file="db/010_ddl_create_authorities_table.sql" relativeToChangelogFile="true"/>
 </databaseChangeLog>
