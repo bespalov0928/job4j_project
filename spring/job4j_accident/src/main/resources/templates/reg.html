@@ -18,24 +18,11 @@
 </head>
 <body>
 
-<!--<div class="container-fluid p-0">-->
-<!--    <div class="container mt-2">-->
-<!--        <h3>Проект job4j_accident</h3>-->
-<!--        <ul>-->
-<!--            <li><a th:href="@{/reg}">Регистрация</a></li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--</div>-->
-
 <div class="container py-3">
     <div class="container py-3">
         <main class="form-signin">
-            <h1 class="h3 mb-3 fw-normal">Авторизация</h1>
-            <!--<div th:if="${not #lists.isEmpty(errorMessage)}" class="alert alert-danger" role="alert">-->
-            <!--  <span th:text="${errorMessage}"></span>-->
-            <!--</div>-->
-            <form th:action="@{/login}" method="post">
-                <!--<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>-->
+            <h1 class="h3 mb-3 fw-normal">Регистрация</h1>
+            <form th:action="@{/reg}" method="post">
                 <div class="form-floating mb-3">
                     <input type="text" class="form-control" id="username" name="username">
                     <label for="username">User name</label>
@@ -44,10 +31,6 @@
                     <input type="password" class="form-control" id="password" name="password">
                     <label for="password">Password</label>
                 </div>
-                <hr class="my-4">
-                <button type="submit" class="w-100 btn btn-lg btn-primary">Авторизация</button>
-            </form>
-            <form th:action="@{/reg}" method="get">
                 <hr class="my-4">
                 <button type="submit" class="w-100 btn btn-lg btn-primary">Регистрация</button>
             </form>
