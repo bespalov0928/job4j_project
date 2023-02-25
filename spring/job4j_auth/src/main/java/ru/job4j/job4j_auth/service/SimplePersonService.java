@@ -1,9 +1,7 @@
 package ru.job4j.job4j_auth.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import ru.job4j.job4j_auth.model.Person;
 import ru.job4j.job4j_auth.repository.PersonRepository;
 
@@ -24,17 +22,21 @@ public class SimplePersonService implements PersonService {
     }
 
     public Optional<Person> findById(int id) {
-        var person = this.personRepository.findById(id);
+        Optional<Person> person = this.personRepository.findById(id);
         return person;
     }
 
     public Person save(Person person) {
-        var rsl = this.personRepository.save(person);
+        Person rsl = this.personRepository.save(person);
         return rsl;
     }
 
     public boolean update(Person person) {
-        this.personRepository.save(person);
+        Optional<Person> personOptional = findById(person.getId());
+        Person personOld = personOptional.get();
+        personOld.setLogin(person.getLogin());
+        personOld.setPassword(person.getPassword());
+        this.personRepository.save(personOld);
         return true;
     }
 

@@ -8,6 +8,8 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.job4j_auth.model.Person;
 import ru.job4j.job4j_auth.service.PersonService;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,32 +23,40 @@ public class PersonController {
     }
 
     @GetMapping("/")
-    public List<Person> findAll() {
-        var rsl = this.personService.findAll();
-        return rsl;
+    public ResponseEntity<List<Person>> findAll() {
+        List<Person> rsl = this.personService.findAll();
+//        ResponseEntity<List<Person>> entity = new ResponseEntity<List<Person>>(
+//                rsl,
+//                rsl.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK
+//        );
+        ResponseEntity<List<Person>> entityNew = ResponseEntity.ok().body(rsl);
+        return entityNew;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Person> findById(@PathVariable int id) {
         Optional<Person> rsl = this.personService.findById(id);
-        ResponseEntity<Person> entity = new ResponseEntity<Person>(
-                rsl.orElse(new Person()),
-                rsl.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
-        return entity;
+//        ResponseEntity<Person> entity = new ResponseEntity<Person>(
+//                rsl.orElse(new Person()),
+//                rsl.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        ResponseEntity<Person> entityNew = ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(rsl.get());
+        return entityNew;
     }
 
     @PostMapping("/")
     public ResponseEntity<Person> create(@RequestBody Person person) {
         Person rsl = this.personService.save(person);
-        return new ResponseEntity<Person>(
-                rsl,
-                HttpStatus.CREATED
-        );
+//        ResponseEntity<Person> response = new ResponseEntity<Person>(
+//                rsl,
+//                HttpStatus.CREATED
+//        );
+        ResponseEntity<Person> responseNew = ResponseEntity.status(HttpStatus.CREATED).body(rsl);
+        return responseNew;
     }
 
     @PutMapping("/")
     public ResponseEntity<Void> update(@RequestBody Person person) {
-        Person rsl = this.personService.save(person);
+        boolean rsl = this.personService.update(person);
         return ResponseEntity.ok().build();
     }
 
