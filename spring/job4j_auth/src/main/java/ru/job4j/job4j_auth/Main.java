@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import javax.sql.DataSource;
 
 @SpringBootApplication
-public class Job4jAuthApplication extends SpringBootServletInitializer {
+public class Main extends SpringBootServletInitializer {
 
     @Bean
     public SpringLiquibase liquibase(DataSource ds) {
@@ -25,7 +25,7 @@ public class Job4jAuthApplication extends SpringBootServletInitializer {
 //    }
 
     public static void main(String[] args) {
-        SpringApplication.run(Job4jAuthApplication.class, args);
+        SpringApplication.run(Main.class, args);
     }
 
 }
