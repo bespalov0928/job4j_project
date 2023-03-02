@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class SimplePersonService implements PersonService {
 
-    private PersonRepository personRepository;
+    private final PersonRepository personRepository;
 
     public SimplePersonService(PersonRepository personRepository) {
         this.personRepository = personRepository;
@@ -34,7 +34,7 @@ public class SimplePersonService implements PersonService {
     public boolean update(Person person) {
         Optional<Person> personOptional = findById(person.getId());
         Person personOld = personOptional.get();
-        personOld.setLogin(person.getLogin());
+        personOld.setUsername(person.getUsername());
         personOld.setPassword(person.getPassword());
         this.personRepository.save(personOld);
         return true;

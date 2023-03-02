@@ -76,7 +76,7 @@ public class SimpleAccidentService implements AccidentService {
 
     @Override
     public Collection<Accident> findAll() {
-        return (Collection<Accident>) accidentRepository.findAll();
+        return accidentRepository.findAll();
     }
 
     private List<Rule> getRules(String[] ids) {

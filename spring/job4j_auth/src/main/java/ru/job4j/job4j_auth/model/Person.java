@@ -1,11 +1,9 @@
 package ru.job4j.job4j_auth.model;
 
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+//import jakarta.persistence.*;
+import lombok.*;
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
@@ -18,6 +16,6 @@ public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private String login;
+    private String username;
     private String password;
 }
