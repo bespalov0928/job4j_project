@@ -10,9 +10,9 @@ import java.util.Optional;
 
 public interface PersonService {
 
-    public List<Person> findAll();
-    public Optional<Person> findById(int id);
-    public Person save(Person person);
-    public boolean update(Person person);
-    public boolean delete(int id);
+    List<Person> findAll();
+    Optional<Person> findById(int id);
+    Person save(Person person);
+    boolean update(Person person);
+    boolean delete(int id);
 }

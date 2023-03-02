@@ -3,6 +3,7 @@ package ru.job4j.job4j_auth.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.job4j_auth.model.Person;
@@ -17,9 +18,11 @@ import java.util.Optional;
 @RequestMapping("/person")
 public class PersonController {
     private final PersonService personService;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public PersonController(PersonService personService) {
+    public PersonController(PersonService personService, BCryptPasswordEncoder passwordEncoder) {
         this.personService = personService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/")
@@ -62,7 +65,14 @@ public class PersonController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        var rsl = this.personService.delete(id);
+        boolean rsl = this.personService.delete(id);
         return rsl ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
+
+    @PostMapping("/sign-up")
+    public void signUp(@RequestBody Person person) {
+        person.setPassword(passwordEncoder.encode(person.getPassword()));
+        this.personService.save(person);
+    }
+
 }
