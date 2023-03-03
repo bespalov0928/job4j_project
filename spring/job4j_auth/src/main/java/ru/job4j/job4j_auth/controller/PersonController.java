@@ -1,5 +1,8 @@
 package ru.job4j.job4j_auth.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -9,29 +12,29 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.job4j_auth.model.Person;
 import ru.job4j.job4j_auth.service.PersonService;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
 
 @RestController
 @RequestMapping("/person")
 public class PersonController {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonController.class.getSimpleName());
+    private final ObjectMapper objectMapper;
+
     private final PersonService personService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public PersonController(PersonService personService, BCryptPasswordEncoder passwordEncoder) {
+    public PersonController(PersonService personService, BCryptPasswordEncoder passwordEncoder, ObjectMapper objectMapper) {
         this.personService = personService;
         this.passwordEncoder = passwordEncoder;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/")
     public ResponseEntity<List<Person>> findAll() {
         List<Person> rsl = this.personService.findAll();
-//        ResponseEntity<List<Person>> entity = new ResponseEntity<List<Person>>(
-//                rsl,
-//                rsl.isEmpty() ? HttpStatus.NOT_FOUND : HttpStatus.OK
-//        );
         ResponseEntity<List<Person>> entityNew = ResponseEntity.ok().body(rsl);
         return entityNew;
     }
@@ -39,20 +42,24 @@ public class PersonController {
     @GetMapping("/{id}")
     public ResponseEntity<Person> findById(@PathVariable int id) {
         Optional<Person> rsl = this.personService.findById(id);
-//        ResponseEntity<Person> entity = new ResponseEntity<Person>(
-//                rsl.orElse(new Person()),
-//                rsl.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+        rsl.orElseThrow(() -> new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Person is not found. Please, check requisites."
+        ));
         ResponseEntity<Person> entityNew = ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(rsl.get());
         return entityNew;
     }
 
     @PostMapping("/")
     public ResponseEntity<Person> create(@RequestBody Person person) {
+        String password = person.getPassword();
+        String username = person.getUsername();
+        if (password == null || username == null) {
+            throw new NullPointerException("Username and password mustn't be empty.");
+        }
+        if (password.length() < 6) {
+            throw new IllegalArgumentException("Invalid password. Password length must be more than 5 characters.");
+        }
         Person rsl = this.personService.save(person);
-//        ResponseEntity<Person> response = new ResponseEntity<Person>(
-//                rsl,
-//                HttpStatus.CREATED
-//        );
         ResponseEntity<Person> responseNew = ResponseEntity.status(HttpStatus.CREATED).body(rsl);
         return responseNew;
     }
@@ -73,6 +80,19 @@ public class PersonController {
     public void signUp(@RequestBody Person person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         this.personService.save(person);
+    }
+
+    @ExceptionHandler(value = {IllegalArgumentException.class})
+    public void exceptionHandler(Exception e, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setStatus(HttpStatus.BAD_REQUEST.value());
+        response.setContentType("application/json");
+        response.getWriter().write(objectMapper.writeValueAsString(new HashMap<>() {
+            {
+                put("message", e.getMessage());
+                put("type", e.getClass());
+            }
+        }));
+        LOGGER.error(e.getLocalizedMessage());
     }
 
 }
