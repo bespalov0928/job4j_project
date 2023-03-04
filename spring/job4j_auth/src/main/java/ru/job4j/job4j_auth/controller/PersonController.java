@@ -15,6 +15,8 @@ import ru.job4j.job4j_auth.service.PersonService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 @RestController
@@ -80,6 +82,39 @@ public class PersonController {
     public void signUp(@RequestBody Person person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         this.personService.save(person);
+    }
+
+    @PatchMapping("/")
+    public ResponseEntity<Person> patch(@RequestBody Person person) throws InvocationTargetException, IllegalAccessException {
+        Optional<Person> current = this.personService.findById(person.getId());
+        if (current.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+
+        var methods = current.get().getClass().getDeclaredMethods();
+        var namePerMethod = new HashMap<String, Method>();
+        for (var method : methods) {
+            var name = method.getName();
+            if (name.startsWith("get") || name.startsWith("set")) {
+                namePerMethod.put(name, method);
+            }
+        }
+        for (var name : namePerMethod.keySet()) {
+            if (name.startsWith("get")) {
+                var getMethod = namePerMethod.get(name);
+                var setMethod = namePerMethod.get(name.replace("get", "set"));
+                if (setMethod == null) {
+                    throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Impossible invoke set method from object : " + current + ", Check set and get pairs.");
+                }
+                var newValue = getMethod.invoke(person);
+                if (newValue != null) {
+                    setMethod.invoke(current.get(), newValue);
+                }
+            }
+        }
+        Person rsl = personService.save(person);
+        ResponseEntity<Person> responseEntity = ResponseEntity.status(HttpStatus.OK).body(rsl);
+        return responseEntity;
     }
 
     @ExceptionHandler(value = {IllegalArgumentException.class})
