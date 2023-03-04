@@ -1,19 +1,23 @@
 package ru.job4j.job4j_auth.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Validate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ru.job4j.job4j_auth.exception.Operation;
 import ru.job4j.job4j_auth.model.Person;
 import ru.job4j.job4j_auth.service.PersonService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -52,7 +56,8 @@ public class PersonController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Person> create(@RequestBody Person person) {
+    @Validated(Operation.OnCreate.class)
+    public ResponseEntity<Person> create(@Valid @RequestBody Person person) {
         String password = person.getPassword();
         String username = person.getUsername();
         if (password == null || username == null) {
@@ -67,7 +72,7 @@ public class PersonController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody Person person) {
+    public ResponseEntity<Void> update(@Valid @RequestBody Person person) {
         boolean rsl = this.personService.update(person);
         return ResponseEntity.ok().build();
     }
@@ -79,13 +84,13 @@ public class PersonController {
     }
 
     @PostMapping("/sign-up")
-    public void signUp(@RequestBody Person person) {
+    public void signUp(@Valid @RequestBody Person person) {
         person.setPassword(passwordEncoder.encode(person.getPassword()));
         this.personService.save(person);
     }
 
     @PatchMapping("/")
-    public ResponseEntity<Person> patch(@RequestBody Person person) throws InvocationTargetException, IllegalAccessException {
+    public ResponseEntity<Person> patch(@Valid @RequestBody Person person) throws InvocationTargetException, IllegalAccessException {
         Optional<Person> current = this.personService.findById(person.getId());
         if (current.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
